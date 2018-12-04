@@ -50,5 +50,5 @@ render() {
 }
 
 export default GoogleApiWrapper({
-  apiKey:'AIzaSyCyL26VUP6spTo4mN_buaSOiz2dm-XcVoE'
+  apiKey:''
 })(App);
