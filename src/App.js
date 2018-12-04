@@ -1,28 +1,54 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import {Map,GoogleApiWrapper,Marker,InfoWindow} from 'google-maps-react';
 
-class App extends Component {
-  render() {
+const mapStyle ={
+  width :'100%',
+  height:'100%'
+};
+
+export class App extends Component {
+  state={
+    showingInfoWindow:false,
+    activeMarker:{},
+    selectedPlace:{}
+  };
+  onMarkerClick = (props,marker,e)=>{
+    this.setState({
+      showingInfoWindow:true,
+      activeMarker:marker,
+      selectedPlace:props
+    });
+  }
+  onClose = (props)=>{
+    if(this.state.showingInfoWindow){
+      this.setState({
+        showingInfoWindow:false,
+        activeMarker:null
+      });
+    }
+  }
+render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
+        <Map
+            google={this.props.google}
+            zoom={14}
+            style={mapStyle}>
+        <Marker onClick={this.onMarkerClick} name={'India'} />
+        <InfoWindow
+         marker={this.state.activeMarker}
+        visible={this.state.showingInfoWindow}
+        onClose={this.onClose}>
+          <div>
+            <h4>
+              {this.state.selectedPlace.name}
+            </h4>
+          </div>
+        </InfoWindow>
+      </Map>
     );
   }
 }
 
-export default App;
+export default GoogleApiWrapper({
+  apiKey:'AIzaSyCyL26VUP6spTo4mN_buaSOiz2dm-XcVoE'
+})(App);
